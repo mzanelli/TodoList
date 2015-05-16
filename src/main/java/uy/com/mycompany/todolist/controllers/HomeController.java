@@ -17,7 +17,7 @@ import uy.com.mycompany.todolist.repositories.PostRepository;
 import uy.com.mycompany.todolist.services.PostService;
 
 /**
- * Handles requests for the application home page.
+ * Handles requests for the application home page. This is a test.
  */
 @Controller
 public class HomeController {
@@ -27,7 +27,7 @@ public class HomeController {
 
 	@Autowired
 	PostService service;
-
+  
 	private static final Logger logger = LoggerFactory
 			.getLogger(HomeController.class);
 
