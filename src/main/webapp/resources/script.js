@@ -7,7 +7,7 @@
   var todoApp = angular.module("todoApp", []);
 
   todoApp.run(function ($http) {
-    $http.get("resources/todo.json").success(function (data) {
+    $http.get("/TodoList/todos").success(function (data) {
       model.items = data;
     });
   });
@@ -24,7 +24,7 @@
 }
 });
 
-todoApp.controller("ToDoCtrl", function ($scope) {
+todoApp.controller("ToDoCtrl", function ($scope,$http) {
 $scope.todo = model;
 $scope.showComplete = false;
 $scope.myValue=false;
@@ -60,7 +60,22 @@ $scope.warningLevel = function () {
 }
 
 $scope.addNewItem = function (actionText) {
-        $scope.todo.items.push({ action: actionText, done: false });
+ 
+	// Simple POST request example (passing data) :
+	$http.post('/TodoList/todos', { action: actionText, done: false }).
+	  success(function(data, status, headers, config) {
+		  console.log("success!!!");
+	    // this callback will be called asynchronously
+	    // when the response is available
+	  }).
+	  error(function(data, status, headers, config) {
+	    // called asynchronously if an error occurs
+	    // or server returns response with an error status.
+	  });	
+	
+	
+	
+		$scope.todo.items.push({ action: actionText, done: false });
         $scope.actionText = "";
         $scope.myValue = false;
         $scope.added = true;
