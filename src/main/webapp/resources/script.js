@@ -62,10 +62,36 @@ todoApp.controller("ToDoCtrl",
 						: "label-warning";
 			}
 			
+			
+			$scope.deleteTodo = function (todoId){
+				
+				console.log("Delete todo: " + todoId);
+				
+				$http.delete("/TodoList/todos/"+todoId,[]).success(function(data, status, headers, config) {
+					
+					console.log("Delete - success!" + data.todoId);
+		
+					for(var i in $scope.todo.items){
+					    if($scope.todo.items[i].todoId==data.todoId){
+					    	$scope.todo.items.splice(i,1);
+					        break;
+					        }
+					}
+					
+					
+				}).error(function(data, status, headers, config) {
+					// called asynchronously if an error occurs
+					// or server returns response with an error status.
+				});
+					
+				
+				
+			}
+			
 			//Todo change the method name
-			$scope.updateComplete = function(item,complete,actionText) {
+			$scope.updateComplete = function(todoId,complete,actionText) {
 
-				console.log("Update complete item: " + item + " complete: " + complete);
+				console.log("Update complete item: " + todoId + " complete: " + complete);
 				
 				//update status
 				if(complete == true){
@@ -76,7 +102,7 @@ todoApp.controller("ToDoCtrl",
 				
 				// Simple POST request example (passing data) :
 				$http.post('/TodoList/todos', {
-					todoId : item,
+					todoId : todoId,
 					action : actionText,
 					done : complete
 				}).success(function(data, status, headers, config) {
@@ -107,7 +133,7 @@ todoApp.controller("ToDoCtrl",
 					action : actionText,
 					done : false
 				}).success(function(data, status, headers, config) {
-					console.log("Create - success!");
+					console.log("Create - success!" + data.todoId);
 					// this callback will be called asynchronously
 					// when the response is available
 					

@@ -46,7 +46,8 @@
        <tr ng-repeat="item in todo.items   |checkedItems:showComplete | orderBy:'action'">
           <td>{{item.action}}</td>
           <td>{{item.done}}</td>
-          <td><input type="checkbox" ng-click="updateComplete(item.todoId,item.done,item.action)" /></td>
+          <td><a href="#" ng-click="updateComplete(item.todoId,item.done,item.action)">Complete</a></td>
+          <td><a href="#" ng-click="deleteTodo(item.todoId)">Delete</a></td>
         </tr>
       </tbody>
       </table>
