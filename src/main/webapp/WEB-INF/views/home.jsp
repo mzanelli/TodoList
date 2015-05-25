@@ -33,9 +33,7 @@
       
       <div ng-show="added">
         Item added!
-        
       </div>
-  
 
       <table class="table table-striped">
       <thead>
@@ -48,7 +46,7 @@
        <tr ng-repeat="item in todo.items   |checkedItems:showComplete | orderBy:'action'">
           <td>{{item.action}}</td>
           <td>{{item.done}}</td>
-          <td><input type="checkbox" ng-model="item.done" /></td>
+          <td><input type="checkbox" ng-click="updateComplete(item.todoId,item.done,item.action)" /></td>
         </tr>
       </tbody>
       </table>
