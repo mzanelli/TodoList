@@ -1,5 +1,3 @@
-// Code goes here
-
 var model = {
 	user : "Adam",
 };
