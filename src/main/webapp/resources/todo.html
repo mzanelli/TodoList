@@ -1,0 +1,46 @@
+<div class="page-header">
+		<h1>
+			{{todo.user}}'s To Do List <span class="label label-default"
+				ng-class="warningLevel()" ng-hide="incompleteCount() == 0">
+				{{incompleteCount()}} </span>
+		</h1>
+	</div>
+	<a href="#/" ng-click="someTest()">Add task</a>
+
+	<div class="panel">
+		
+		<div class="input-group" ng-show="myValue">
+			<input class="form-control" ng-model="actionText" /> <span
+				class="input-group-btn">
+				<button class="btn btn-default" ng-click="addNewItem(actionText)">Add</button>
+			</span>
+		</div>
+
+		<div ng-show="added">Item added!</div>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Done</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr
+					ng-repeat="item in todo.items   |checkedItems:showComplete | orderBy:'action'">
+					<td>{{item.action}}</td>
+					<td>{{item.done}}</td>
+					<td><a href="#/"
+						ng-click="updateComplete(item.todoId,item.done,item.action)"
+						ng-show="!item.done">Complete</a></td>
+						<td><a href="#/edit">Edit</a></td>
+					<td><a href="#/" ng-click="deleteTodo(item.todoId)">Delete</a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="checkbox-inline">
+			<label><input type="checkbox" ng_model="showComplete">
+				Show Complete</label>
+		</div>
+	</div>

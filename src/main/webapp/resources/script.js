@@ -2,7 +2,7 @@ var model = {
 	user : "Adam",
 };
 
-var todoApp = angular.module("todoApp", []);
+var todoApp = angular.module("todoApp", ['ngRoute']);
 
 todoApp.run(function($http) {
 	$http.get("/TodoList/todos").success(function(data) {
@@ -21,6 +21,8 @@ todoApp.filter("checkedItems", function() {
 		return resultArr;
 	}
 });
+
+
 
 todoApp.controller("ToDoCtrl",
 		function($scope, $http) {
@@ -81,17 +83,14 @@ todoApp.controller("ToDoCtrl",
 					// called asynchronously if an error occurs
 					// or server returns response with an error status.
 				});
-					
-				
-				
 			}
 			
-			//Todo change the method name
+			// Todo change the method name
 			$scope.updateComplete = function(todoId,complete,actionText) {
 
 				console.log("Update complete item: " + todoId + " complete: " + complete);
 				
-				//update status
+				// update status
 				if(complete == true){
 					complete = false;
 				}else{
@@ -147,8 +146,6 @@ todoApp.controller("ToDoCtrl",
 					// called asynchronously if an error occurs
 					// or server returns response with an error status.
 				});
-
-				
 				
 				$scope.actionText = "";
 				$scope.myValue = false;
@@ -156,3 +153,19 @@ todoApp.controller("ToDoCtrl",
 			}
 
 		});
+	
+	todoApp.config(function($routeProvider) {
+	  $routeProvider
+
+	  // route for the home page
+	  .when('/edit', {
+	    templateUrl: 'resources/edit.html',
+	    controller: 'ToDoCtrl'
+	  })
+	  .when('/', {
+		    templateUrl: 'resources/todo.html',
+		    controller: 'ToDoCtrl'
+		  })	  
+		  ;
+	  
+	});
