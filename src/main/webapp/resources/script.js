@@ -1,3 +1,4 @@
+
 var model = {
 	user : "Adam",
 };
@@ -7,6 +8,7 @@ var todoApp = angular.module("todoApp", ['ngRoute']);
 todoApp.run(function($http) {
 	$http.get("/TodoList/todos").success(function(data) {
 		model.items = data;
+		console.log("Run application!!")
 	});
 });
 
@@ -22,15 +24,16 @@ todoApp.filter("checkedItems", function() {
 	}
 });
 
-
-
 todoApp.controller("ToDoCtrl",
-		function($scope, $http) {
+		function($scope, $http, $location) {
+			
 			$scope.todo = model;
+			console.log("Initialize controller!!")
 			$scope.showComplete = false;
 			$scope.myValue = false;
 			$scope.added = false;
-
+			$scope.edited = "pepe parada";
+			
 			angular.module('todoApp', []).filter('custom', function() {
 				return function() {
 					return "";
@@ -85,6 +88,22 @@ todoApp.controller("ToDoCtrl",
 				});
 			}
 			
+			$scope.editTodo = function (todoId){
+				
+				console.log("Edit todo: " + todoId);
+				
+				$http.get("/TodoList/todos/"+todoId,[])
+				.success(function(data, status, headers, config) {
+					
+					$scope.todo.edited = data;
+	
+					
+				}).error(function(data, status, headers, config) {
+					// called asynchronously if an error occurs
+					// or server returns response with an error status.
+				});
+			}
+			
 			// Todo change the method name
 			$scope.updateComplete = function(todoId,complete,actionText) {
 
@@ -113,6 +132,35 @@ todoApp.controller("ToDoCtrl",
 					});
 					
 					
+					// this callback will be called asynchronously
+					// when the response is available
+					
+				}).error(function(data, status, headers, config) {
+					// called asynchronously if an error occurs
+					// or server returns response with an error status.
+				});
+				
+			}
+			
+			$scope.updateTask = function(task) {
+
+				// Simple POST request example (passing data) :
+				$http.post('/TodoList/todos', {
+					todoId : task.todoId,
+					action : task.action,
+					done : task.done
+				}).success(function(data, status, headers, config) {
+					console.log("Update - success!");
+		
+					angular.forEach($scope.todo.items, function(item) {
+						if (item.todoId === data.todoId) {
+							console.log("Founded!!");
+							item.action = task.action;
+							item.done = task.done;
+						}
+					});
+					
+					$location.path('/');
 					// this callback will be called asynchronously
 					// when the response is available
 					

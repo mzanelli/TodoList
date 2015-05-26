@@ -21,27 +21,29 @@ public class TodoController {
 	TodoService service;
 	
 	@RequestMapping( method = RequestMethod.GET)
-	public @ResponseBody List<Todo> getAllTodos() {
+	public @ResponseBody List<Todo> getAllTasks() {
 		List<Todo> todos = service.findAll();
 		return todos;
 	}
 	
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	 public Todo getTaskById(@PathVariable("id") Integer todoId) throws Exception {
+	  
+		Todo todo = service.findOne(todoId);
+		
+	  return todo;
+	 }
+	
 	@RequestMapping(method = RequestMethod.POST)
-	public @ResponseBody Todo update(@RequestBody Todo todo) {
+	public @ResponseBody Todo saveOrUpdateTask(@RequestBody Todo todo) {
 	    service.save(todo);
 		return todo;
 	}
-	
-	@RequestMapping(method = RequestMethod.PUT)
-	public @ResponseBody Todo save(@RequestBody Todo todo) {
-	    service.save(todo);
-		return todo;
-	}
-	
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@ResponseBody
-	 public Todo deleteEmployee(@PathVariable("id") Integer todoId) throws Exception {
+	 public Todo deleteTask(@PathVariable("id") Integer todoId) throws Exception {
 	  
 		Todo todo = service.findOne(todoId);
 		
@@ -49,6 +51,5 @@ public class TodoController {
 		
 	  return todo;
 	 }
-
 
 }

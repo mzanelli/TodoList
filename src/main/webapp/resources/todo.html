@@ -1,11 +1,5 @@
-<div class="page-header">
-		<h1>
-			{{todo.user}}'s To Do List <span class="label label-default"
-				ng-class="warningLevel()" ng-hide="incompleteCount() == 0">
-				{{incompleteCount()}} </span>
-		</h1>
-	</div>
-	<a href="#/" ng-click="someTest()">Add task</a>
+   
+	<button class="btn btn-default" ng-click="someTest()">Show form task</button>
 
 	<div class="panel">
 		
@@ -23,6 +17,9 @@
 				<tr>
 					<th>Description</th>
 					<th>Done</th>
+					<th>Status</th>
+					<th>Edit</th>
+					<th>Delete</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -33,7 +30,7 @@
 					<td><a href="#/"
 						ng-click="updateComplete(item.todoId,item.done,item.action)"
 						ng-show="!item.done">Complete</a></td>
-						<td><a href="#/edit">Edit</a></td>
+						<td><a href="#/edit" ng-click="editTodo(item.todoId)">Edit</a></td>
 					<td><a href="#/" ng-click="deleteTodo(item.todoId)">Delete</a></td>
 				</tr>
 			</tbody>
