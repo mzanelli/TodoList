@@ -1,22 +1,21 @@
    
-	<button class="btn btn-default" ng-click="someTest()">Show form task</button>
+	<button class="btn btn-default" ng-click="showForm()">Show form task</button>
 
 	<div class="panel">
 		
-		<div class="input-group" ng-show="myValue">
+		<div class="input-group" ng-show="todo.showForm">
 			<input class="form-control" ng-model="actionText" /> <span
 				class="input-group-btn">
-				<button class="btn btn-default" ng-click="addNewItem(actionText)">Add</button>
+				<button class="btn btn-default" ng-click="addNewTask(actionText)">Add task</button>
 			</span>
 		</div>
 
-		<div ng-show="added">Item added!</div>
+		<div ng-show="todo.showAddedMessage">Task added!</div>
 
 		<table class="table table-striped">
 			<thead>
-				<tr>
-					<th>Description</th>
-					<th>Done</th>
+				<tr> 
+					<th>Description text</th>
 					<th>Status</th>
 					<th>Edit</th>
 					<th>Delete</th>
@@ -26,12 +25,11 @@
 				<tr
 					ng-repeat="item in todo.items   |checkedItems:showComplete | orderBy:'action'">
 					<td>{{item.action}}</td>
-					<td>{{item.done}}</td>
 					<td><a href="#/"
-						ng-click="updateComplete(item.todoId,item.done,item.action)"
+						ng-click="updateTaskToComplete(item.id,item.done,item.action)"
 						ng-show="!item.done">Complete</a></td>
-						<td><a href="#/edit" ng-click="editTodo(item.todoId)">Edit</a></td>
-					<td><a href="#/" ng-click="deleteTodo(item.todoId)">Delete</a></td>
+						<td><a href="#/edit" ng-click="editTask(item.id)">Edit</a></td>
+					<td><a href="#/" ng-click="deleteTask(item.id)">Delete</a></td>
 				</tr>
 			</tbody>
 		</table>

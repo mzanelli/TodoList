@@ -10,46 +10,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import uy.com.mycompany.todolist.entities.Todo;
-import uy.com.mycompany.todolist.services.TodoService;
+import uy.com.mycompany.todolist.entities.Task;
+import uy.com.mycompany.todolist.services.TaskService;
 
 @Controller
-@RequestMapping("/todos")
-public class TodoController {
+@RequestMapping("/tasks")
+public class TaskController {
 	
 	@Autowired
-	TodoService service;
+	TaskService taskService;
 	
 	@RequestMapping( method = RequestMethod.GET)
-	public @ResponseBody List<Todo> getAllTasks() {
-		List<Todo> todos = service.findAll();
-		return todos;
+	public @ResponseBody List<Task> getAllTasks() {
+		List<Task> tasks = taskService.findAll();
+		return tasks;
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	 public Todo getTaskById(@PathVariable("id") Integer todoId) throws Exception {
-	  
-		Todo todo = service.findOne(todoId);
-		
-	  return todo;
+	 public Task getTaskById(@PathVariable("id") Integer id) throws Exception {
+		Task task = taskService.findOne(id);
+	  return task;
 	 }
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public @ResponseBody Todo saveOrUpdateTask(@RequestBody Todo todo) {
-	    service.save(todo);
-		return todo;
+	public @ResponseBody Task saveOrUpdateTask(@RequestBody Task task) {
+	    taskService.save(task);
+		return task;
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@ResponseBody
-	 public Todo deleteTask(@PathVariable("id") Integer todoId) throws Exception {
-	  
-		Todo todo = service.findOne(todoId);
-		
-		service.delete(todoId);
-		
-	  return todo;
+	 public Task deleteTask(@PathVariable("id") Integer id) throws Exception {
+		Task task = taskService.findOne(id);
+		taskService.delete(id);
+	  return task;
 	 }
 
 }

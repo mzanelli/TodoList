@@ -5,27 +5,27 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import uy.com.mycompany.todolist.entities.Todo;
-import uy.com.mycompany.todolist.repositories.TodoRepository;
+import uy.com.mycompany.todolist.entities.Task;
+import uy.com.mycompany.todolist.repositories.TaskRepository;
 
 @Service
-public class TodoServiceImpl implements TodoService {
+public class TaskServiceImpl implements TaskService {
 
 	@Autowired
-	TodoRepository todoRepo;
+	TaskRepository todoRepo;
 	
 	@Override
-	public Todo save(Todo todo) {
+	public Task save(Task todo) {
 		return todoRepo.save(todo);
 	}
 
 	@Override
-	public Todo findOne(Integer theId) {
+	public Task findOne(Integer theId) {
 		return todoRepo.findOne(theId);
 	}
 
 	@Override
-	public List<Todo> findAll() {
+	public List<Task> findAll() {
 		return todoRepo.findAll();
 	}
 

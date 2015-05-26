@@ -6,9 +6,9 @@ var model = {
 var todoApp = angular.module("todoApp", ['ngRoute']);
 
 todoApp.run(function($http) {
-	$http.get("/TodoList/todos").success(function(data) {
+	$http.get("/TodoList/tasks").success(function(data) {
 		model.items = data;
-		console.log("Run application!!")
+		console.log(" Application run!!")
 	});
 });
 
@@ -27,19 +27,13 @@ todoApp.filter("checkedItems", function() {
 todoApp.controller("ToDoCtrl",
 		function($scope, $http, $location) {
 			
-			$scope.todo = model;
 			console.log("Initialize controller!!")
-			$scope.showComplete = false;
-			$scope.myValue = false;
-			$scope.added = false;
-			$scope.edited = "pepe parada";
-			
-			angular.module('todoApp', []).filter('custom', function() {
-				return function() {
-					return "";
-				}
-			});
 
+			$scope.todo = model;
+			$scope.todo.showForm = false;
+			$scope.todo.showComplete = false;
+			$scope.todo.showAddedMessage = false;
+			
 			$scope.incompleteCount = function() {
 				var count = 0;
 				angular.forEach($scope.todo.items, function(item) {
@@ -50,14 +44,14 @@ todoApp.controller("ToDoCtrl",
 				return count;
 			}
 
-			$scope.someTest = function() {
-
-				if ($scope.myValue === true) {
-					$scope.myValue = false;
+			$scope.showForm = function() {
+				console.log("Show form ... ");
+				$scope.todo.showAddedMessage = false;
+				if ($scope.todo.showForm === true) {
+					$scope.todo.showForm = false;
 				} else {
-					$scope.myValue = true;
+					$scope.todo.showForm = true;
 				}
-
 			}
 
 			$scope.warningLevel = function() {
@@ -66,16 +60,17 @@ todoApp.controller("ToDoCtrl",
 			}
 			
 			
-			$scope.deleteTodo = function (todoId){
+			$scope.deleteTask = function (id){
 				
-				console.log("Delete todo: " + todoId);
+				console.log("Delete todo: " + id);
 				
-				$http.delete("/TodoList/todos/"+todoId,[]).success(function(data, status, headers, config) {
+				$http.delete("/TodoList/tasks/"+id,[]).success(function(data, status, headers, config) {
 					
-					console.log("Delete - success!" + data.todoId);
+					console.log("Delete - success!" + data.id);
 		
+					//remove item from the model
 					for(var i in $scope.todo.items){
-					    if($scope.todo.items[i].todoId==data.todoId){
+					    if($scope.todo.items[i].id==data.id){
 					    	$scope.todo.items.splice(i,1);
 					        break;
 					        }
@@ -88,11 +83,11 @@ todoApp.controller("ToDoCtrl",
 				});
 			}
 			
-			$scope.editTodo = function (todoId){
+			$scope.editTask = function (id){
 				
-				console.log("Edit todo: " + todoId);
+				console.log("Edit todo: " + id);
 				
-				$http.get("/TodoList/todos/"+todoId,[])
+				$http.get("/TodoList/tasks/"+id,[])
 				.success(function(data, status, headers, config) {
 					
 					$scope.todo.edited = data;
@@ -105,9 +100,9 @@ todoApp.controller("ToDoCtrl",
 			}
 			
 			// Todo change the method name
-			$scope.updateComplete = function(todoId,complete,actionText) {
+			$scope.updateTaskToComplete = function(id,complete,actionText) {
 
-				console.log("Update complete item: " + todoId + " complete: " + complete);
+				console.log("Update complete item: " + id + " complete: " + complete);
 				
 				// update status
 				if(complete == true){
@@ -117,24 +112,18 @@ todoApp.controller("ToDoCtrl",
 				}
 				
 				// Simple POST request example (passing data) :
-				$http.post('/TodoList/todos', {
-					todoId : todoId,
+				$http.post('/TodoList/tasks', {
+					id : id,
 					action : actionText,
 					done : complete
 				}).success(function(data, status, headers, config) {
 					console.log("Update - success!");
 		
 					angular.forEach($scope.todo.items, function(item) {
-						if (item.todoId === data.todoId) {
-							console.log("Founded!!");
+						if (item.id === data.id) {
 							item.done = complete;
 						}
 					});
-					
-					
-					// this callback will be called asynchronously
-					// when the response is available
-					
 				}).error(function(data, status, headers, config) {
 					// called asynchronously if an error occurs
 					// or server returns response with an error status.
@@ -145,24 +134,23 @@ todoApp.controller("ToDoCtrl",
 			$scope.updateTask = function(task) {
 
 				// Simple POST request example (passing data) :
-				$http.post('/TodoList/todos', {
-					todoId : task.todoId,
+				$http.post('/TodoList/tasks', {
+					id : task.id,
 					action : task.action,
 					done : task.done
 				}).success(function(data, status, headers, config) {
 					console.log("Update - success!");
 		
 					angular.forEach($scope.todo.items, function(item) {
-						if (item.todoId === data.todoId) {
+						if (item.id === data.id) {
 							console.log("Founded!!");
 							item.action = task.action;
 							item.done = task.done;
 						}
 					});
-					
+
+					//show tasks list view
 					$location.path('/');
-					// this callback will be called asynchronously
-					// when the response is available
 					
 				}).error(function(data, status, headers, config) {
 					// called asynchronously if an error occurs
@@ -171,21 +159,21 @@ todoApp.controller("ToDoCtrl",
 				
 			}
 
-			$scope.addNewItem = function(actionText) {
+			$scope.addNewTask = function(actionText) {
 
 				// Simple POST request example (passing data) :
-				$http.post('/TodoList/todos', {
+				$http.post('/TodoList/tasks', {
 					action : actionText,
 					done : false
 				}).success(function(data, status, headers, config) {
-					console.log("Create - success!" + data.todoId);
+					console.log("Create - success!" + data.id);
 					// this callback will be called asynchronously
 					// when the response is available
 					
 					console.log("Data: " + data);
 					
 					$scope.todo.items.push({
-						todoId : data.todoId,
+						id : data.id,
 						action : actionText,
 						done : false
 					});
@@ -196,8 +184,8 @@ todoApp.controller("ToDoCtrl",
 				});
 				
 				$scope.actionText = "";
-				$scope.myValue = false;
-				$scope.added = true;
+				$scope.todo.showForm = false;
+				$scope.todo.showAddedMessage = true;
 			}
 
 		});
