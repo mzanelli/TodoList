@@ -16,8 +16,6 @@ import uy.com.mycompany.todolist.services.TodoService;
 @Controller
 @RequestMapping("/todos")
 public class TodoController {
-		
-	// This is a test ...
 	
 	@Autowired
 	TodoService service;
