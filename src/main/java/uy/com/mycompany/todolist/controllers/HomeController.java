@@ -38,6 +38,7 @@ public class HomeController {
 	public String home(Locale locale, Model model) {
 
 		//this is a change from testbranch001
+		//Implement bug fix 001
 
 		logger.info("Welcome home! The client locale is {}.", locale);
 
